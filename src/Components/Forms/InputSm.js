@@ -11,19 +11,20 @@ const InputContainer = styled.div`
   margin-top: 10px;
   color: #000;
   font-family: "Montserrat", sans-serif;
+  border: none;
 
   & > input {
     border: 1px solid #2699F8;
-    border-radius: 0.25rem;
-    background-color: #FFF;
+    border-radius: 5px;
+    // background-color: #FFF;
+    background-color: #2699F8;
     outline: none;
-    // padding: 8px 2px 8px 11px;
     padding: 1px 0px 1px 5px;
-    font-size: 14px;
-    transition: all 0.2s ease;
+    // padding: 8px 2px 8px 11px;
+    font-size: 12px;
+    // transition: all 0.2s ease;
     z-index: 500;
     height: 30px;
-    margin-buttom: 10px;
   }
 
   & > input:hover {
@@ -32,55 +33,25 @@ const InputContainer = styled.div`
 
   & > label {
     color: #757575;
-    position: absolute;
-    top: 15px;
-    left: 10px;
-    transition: all 0.2s ease;
+    // position: absolute;
+    // top: 15px;
+    // left: 10px;
+    // transition: all 0.2s ease;
     z-index: 500;
     border: none;
 
     ${props =>
       props.focused && `
-        font-size: 13px;
-        transform: translateY(-23px) translateX(-5px);
+        font-size: 10px;
+        // transform: translateY(-23px) translateX(-5px);
         z-index: 501;
         color: #757575;
-        background: #FFF;
-        padding: 0px 5px 0px 5px;
+        // background: #FFF;
+        // padding: 0px 5px 0px 5px;
       `}
-  }
-`
-
-const Buttom = styled.div`
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  z-index: 502;
-  outline:none;
-
-  & > button {
-    background-color: #DCDCDC;
-    height: 32px;
-    width: 30px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border: none;
-    outline:none;
-    transition-duration: 0.4s;
-  }
+  } 
   
-  & > button:hover {
-    background-color: #CCC;
-    border: none;
-    outline:none;
-  }
-
-  & > button:active {
-    background-color: #DDD;
-    border: none;
-    outline:none;
-  }
-`
+`;
 
 export default function Input({ 
   name,
@@ -88,8 +59,6 @@ export default function Input({
   type,
   onBlur,
   onFocus,
-  icon,
-  callButton,
   ...rest 
 }) {
   const inputRef = useRef(null)
@@ -97,9 +66,7 @@ export default function Input({
   const [focused, setFocused] = useState(false)
 
   useEffect(() => {
-    if (!inputRef.current.value) {
-      inputRef.current.value = defaultValue !== undefined ? defaultValue : null
-    }
+    inputRef.current.value = defaultValue !== undefined ? defaultValue : null
   }, [defaultValue])
 
   useEffect(() => {
@@ -131,21 +98,18 @@ export default function Input({
     return onBlur
   }
 
+  console.log('**** defaultValue', defaultValue, String(defaultValue).length)
   const isFocused = focused || inputRef.current ? String(inputRef.current.value).length ? true : false : false || defaultValue ? true : false || type === "date"
   
   const renderLabel = () => label && <label>{label}</label>
-  
-  const renderIcon = () => icon && <Buttom>
-    <button type="button" onClick={callButton}>{icon}</button>
-  </Buttom>
 
   return (
     <InputContainer focused={isFocused}>
       {renderLabel()}
-      {renderIcon()}
       <input 
         ref={inputRef} 
         type={type}
+        defaultValue={defaultValue}
         placeholder={isFocused ? undefined : label}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
@@ -157,8 +121,6 @@ export default function Input({
           fontSize: '10px',
           fontWeight: 'normal',
           marginTop: '2px',
-          marginBottom: '0px',
-          paddingBottom: '0px',
         }}>{error}</span> 
       }
     </InputContainer>
@@ -170,6 +132,4 @@ Input.propTypes = {
   label: PropTypes.string,
   type: PropTypes.string,
   inputRef: PropTypes.func,
-  callButton: PropTypes.func,
-  icon: PropTypes.element,
 }

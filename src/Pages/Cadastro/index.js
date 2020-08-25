@@ -222,7 +222,6 @@ const useStyles = makeStyles((theme) => ({
 const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
   const classes = useStyles()
   const formRef = useRef(null)
-  const inputRef = useRef()
 
   const [initialValues, setInitialValues] = useState({
     pedido: pedidoId,
@@ -248,13 +247,13 @@ const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
   useEffect(() => {
     try {
 
-      console.log('**** Inicio', tipoCad, pedidoId)
+      // console.log('**** Inicio', tipoCad, pedidoId)
       if (tipoCad !== 'N' && tipoCad !== 'E') {
         setDisableEdit(true)
       }
 
       if (pedidoId !== null && tipoCad !== 'N') {
-        console.log('**** buscaPedido')
+        // console.log('**** buscaPedido')
         buscaPedido()
       }
 
@@ -282,7 +281,7 @@ const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
       data.limitecoleta = data.limitecoleta ? data.limitecoleta.substring(0, 10) : null
       data.limiteentrega = data.limiteentrega ? data.limiteentrega.substring(0, 10) : null
 
-      setInitialValues(data)
+      // setInitialValues(data)
       setTipoCadastro(data.tipo)
       // setVeiculos(data.veiculos)
     }
@@ -298,7 +297,7 @@ const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
       console.log('**** data', data)
 
       const schema = Yup.object().shape({
-        pedido: Yup.string().required('O pedido é obrigatório'),
+        id: Yup.string().required('O pedido é obrigatório'),
         // email: Yup.string()
         //   .email('Digite um email válido')
         //   .required('O email é obrigatório')
@@ -309,8 +308,6 @@ const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
         abortEarly: false,
       })
       
-      console.log('**** formRef.current', formRef.current)
-          
       formRef.current.setErrors({})
       reset()
       
@@ -323,8 +320,8 @@ const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
         })
 
         formRef.current.setErrors(errorMessages)
+        // Object.keys(errorMessages).map(key => formRef.current.setFieldError(key, errorMessages[key]))
       }
-      console.log('**** err', err, formRef.current)
     }
   }
 
@@ -363,9 +360,6 @@ const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
                           type="text"
                           onFocus
                           onBlur
-                          // value={initialValues.id}
-                          // onChange={val => setInitialValues({ ...initialValues, id: val })}
-                          // ref={inputRef}
                         />
                       </Col>
                       <Col xs={2}>
@@ -375,9 +369,6 @@ const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
                           type="date"
                           onFocus
                           onBlur
-                          // value={initialValues.limitecoleta}
-                          // onChange={val => setInitialValues({ ...initialValues, limitecoleta: val })}
-                          // ref={inputRef}
                         />
                       </Col>
                       <Col xs={2}>
@@ -387,9 +378,6 @@ const Cadastro = ({ isShowPedido, hide, tipo, pedidoId }) => {
                           type="date"
                           onFocus
                           onBlur
-                          // value={initialValues.limiteentrega}
-                          // onChange={val => setInitialValues({ ...initialValues, limiteentrega: val })}
-                          // ref={inputRef}
                         />
                       </Col>
                     </Row>

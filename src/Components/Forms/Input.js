@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, forwardRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useField } from '@unform/core'
 import PropTypes from 'prop-types'
 import styled from "styled-components";
@@ -10,6 +10,7 @@ const InputContainer = styled.div`
   position: relative;
   margin-top: 10px;
   color: #000;
+  font-family: "Montserrat", sans-serif;
 
   & > input {
     border: 1px solid #2699F8;
@@ -20,7 +21,7 @@ const InputContainer = styled.div`
     font-size: 14px;
     transition: all 0.2s ease;
     z-index: 500;
-    height: 35px;
+    height: 30px;
   }
 
   & > input:hover {
@@ -49,7 +50,7 @@ const InputContainer = styled.div`
   
 `;
 
-function Input({ 
+export default function Input({ 
   name,
   label,
   type,
@@ -60,63 +61,29 @@ function Input({
   const inputRef = useRef(null)
   const { fieldName, registerField, defaultValue, error } = useField(name)
   const [focused, setFocused] = useState(false)
-  // const [isFocused, setIsFocused] = useState(false)
 
-  // useEffect(() => {
-  //   inputRef.current.value = defaultValue
-  // }, [defaultValue])
+  useEffect(() => {
+    inputRef.current.value = defaultValue !== undefined ? defaultValue : null
+  }, [defaultValue])
 
   useEffect(() => {
     registerField({
       name: fieldName,
       ref: inputRef.current,
       path: 'value',
-      // clearValue(ref) {
-      //   ref.value = ''
-      //   ref.clear()
-      // },
-      // setValue(ref, value) {
-      //   ref.setNativeProps({ text: value })
-      //   inputRef.current.value = value
-      // },
-      // getValue(ref) {
-      //   return ref.value
-      // },
+      clearValue(ref) {
+        ref.value = ''
+        ref.clear()
+      },
+      setValue(ref, value) {
+        ref.setNativeProps({ text: value })
+        inputRef.current.value = value
+      },
+      getValue(ref) {
+        return ref.value
+      },
     })
   }, [fieldName, registerField])
-
-  /*
-  useEffect(() => {
-    const fncFocused = () => {
-      if (type === "date") {
-        setIsFocused(true)
-        return
-      }
-  
-      if (focused) {
-        setIsFocused(true)
-        return
-      } 
-      
-      if (inputRef.current) {
-        // console.log('**** value', String(inputRef.current.value).length, defaultValue)
-        if (String(inputRef.current.value).length > 0 || String(rest.value).length > 0) {
-          setIsFocused(true)
-          return
-        }
-      } 
-      
-      setIsFocused(false)
-      return
-    }
-    fncFocused()
-  }, [type, focused, rest])
-  
-
-  if (rest.value === null || typeof rest.value === 'object') {
-    rest.value = ""
-  }
-  */
 
   const handleOnFocus = () => {
     setFocused(true)
@@ -128,11 +95,10 @@ function Input({
     return onBlur
   }
 
-  const isFocused = focused || inputRef.current ? String(inputRef.current.value).length ? true : false : false || type === "date"
+  console.log('**** defaultValue', defaultValue, String(defaultValue).length)
+  const isFocused = focused || inputRef.current ? String(inputRef.current.value).length ? true : false : false || defaultValue ? true : false || type === "date"
   
   const renderLabel = () => label && <label>{label}</label>
-  // console.log('**** renderLabel', label)
-  console.log('**** rest', rest)
 
   return (
     <InputContainer focused={isFocused}>
@@ -144,14 +110,16 @@ function Input({
         placeholder={isFocused ? undefined : label}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
-        // onChange={value => {
-        //   if (inputRef.current) {
-        //     inputRef.current.value = value
-        //   }
-        // }}
         {...rest} 
       />
-      { error && <span style={{ color: '#F00' }}>{error}</span> }
+      { 
+        error && <span style={{ 
+          color: '#E6474D',
+          fontSize: '10px',
+          fontWeight: 'normal',
+          marginTop: '2px',
+        }}>{error}</span> 
+      }
     </InputContainer>
   )
 }
@@ -162,5 +130,3 @@ Input.propTypes = {
   type: PropTypes.string,
   inputRef: PropTypes.func,
 }
-
-export default forwardRef(Input)
